@@ -13,11 +13,15 @@ class Ali_Request_Site_Parcer extends Document
      *
      * parcer aliexpress site and gets json values of product
      */
-
+    
     public function get_description_url()
     {
-        $this->parcer_ali_product_site();
-        return $this->product_values['descriptionModule']['descriptionUrl'];
+        return json_encode($this->product_values['descriptionModule']['descriptionUrl']);
+    }
+    
+    public function get_product_values()
+    {
+        return json_encode($this->product_values);
     }
     
     public function parcer_ali_product_site()
@@ -56,10 +60,36 @@ class Ali_Request_Site_Parcer extends Document
         return $array[$prefix . $name];
     }
     
+    public function get_images(){
+        
+        return json_encode($this->product_values['imageModule']['imagePathList']);
+    }
+    public function get_variations_attibutes(){
+        
+        return json_encode($this->product_values['skuModule']);
+    }
+    
+    public function get_specs(){
+        
+        return json_encode($this->product_values['specsModule']['props']);
+    }
+    
 }
 
-$document = new Ali_Request_Site_Parcer('https://aliexpress.ru/item/4001237404951.html', true);
-print_r($document->get_description_url());
+$site_html = new Ali_Request_Site_Parcer('https://aliexpress.ru/item/4001237404951.html', true);
+
+$site_html->parcer_ali_product_site();
+
+//print_r($site_html->get_product_values());
+//print_r($site_html->get_images());
+//print_r($site_html->get_variations_attibutes());
+//print_r($site_html->get_specs());
+
+//echo $des_url = $site_html->get_description_url();
+
+//$desc_site_html = new Ali_Request_Site_Parcer($des_url, true);
+
+
 
 
 
