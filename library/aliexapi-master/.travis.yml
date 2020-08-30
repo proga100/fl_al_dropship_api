@@ -1,0 +1,14 @@
+language: php
+sudo: false
+php:
+  - 7.2
+  - 7.3
+
+before_script:
+  - composer self-update
+  - composer install --prefer-source --no-interaction
+
+script: phpunit --configuration phpunit.xml
+
+notifications:
+  email: never

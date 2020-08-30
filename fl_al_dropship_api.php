@@ -28,6 +28,8 @@ if (!defined('WPINC')) {
     die;
 }
 
-require_once 'helpers/ajax_calls.php';
+require_once 'helpers/autoload.php';
+
+
 
 

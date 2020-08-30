@@ -30,7 +30,7 @@ class Ali_Request_Site_Parcer extends Document
         $attributes_html = $this->find('script');
         
         foreach ($attributes_html as $text) {
-            echo "<pre>";
+     
             $val = $this->getProtectedValue($text, 'node');
             //   print_r ($val->nodeValue);
             if (preg_match('#\swindow.runParams\s*=\s*(.*?);\s*$#ms', $val->nodeValue, $matches)) {
@@ -76,9 +76,9 @@ class Ali_Request_Site_Parcer extends Document
     
 }
 
-$site_html = new Ali_Request_Site_Parcer('https://aliexpress.ru/item/4001237404951.html', true);
+//$site_html = new Ali_Request_Site_Parcer('https://aliexpress.ru/item/4001237404951.html', true);
 
-$site_html->parcer_ali_product_site();
+//$site_html->parcer_ali_product_site();
 
 //print_r($site_html->get_product_values());
 //print_r($site_html->get_images());
