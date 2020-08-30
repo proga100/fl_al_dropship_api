@@ -29,29 +29,35 @@ if (!defined('WPINC')) {
 }
 
 class Ali_Api_Endpoints extends WP_REST_Controller {
-    
+
+    public function __construct(){
+       add_action( 'rest_api_init', array($this, 'register_routes' ));
+    }
     /**
      * Register the routes for the objects of the controller.
      */
     public function register_routes() {
         $version = '1';
-        $namespace = 'Ali_Api_Endpoints/v' . $version;
-        $base = 'route';
-      
-        register_rest_route( $namespace, '/' . $base . '/(?P<id>[\d]+)', array(
-            array(
-                'methods'             => WP_REST_Server::READABLE,
-                'callback'            => array( $this, 'get_item' ),
-                'args'                => array(
-                    'context' => array(
-                        'default' => 'view',
+        $namespace = 'ali_api_endpoints/v' . $version;
+        $bases = [
+            'get_item_by_id'=>'item_id=(?P<item_id>[a-zA-Z0-9-]+)',
+            'get_items'=>'items_cat=(?P<lat>[a-z0-9 .\-]+)/long=(?P<long>[a-z0-9 .\-]+)'
+        ];
+
+        foreach ($bases as $base=>$urlquery){
+            register_rest_route( $namespace, '/' . $base . '/'.$urlquery, array(
+                array(
+                    'methods'             => 'GET',
+                    'callback'            => array( $this, $base ),
+                    'args'                => array(
+                        'context' => array(
+                            'default' => 'view',
+                        ),
                     ),
-                ),
-            )
-        ) );
-       
+                )
+            ) );
+        }
     }
-    
 
     /**
      * Get one item from the collection
@@ -59,21 +65,35 @@ class Ali_Api_Endpoints extends WP_REST_Controller {
      * @param WP_REST_Request $request Full data about the request.
      * @return WP_Error|WP_REST_Response
      */
-    public function get_item( $request ) {
+    public function get_item_by_id( $request ) {
         //get parameters from request
         $params = $request->get_params();
         $item = array();//do a query, call another class, etc
         $data = $this->prepare_item_for_response( $item, $request );
-        
+
+        $data = (array)$data;
         //return a response or error based on some conditional
         if ( 1 == 1 ) {
-            return new WP_REST_Response( $data, 200 );
+            return new WP_REST_Response(  $data , 200 );
         } else {
             return new WP_Error( 'code', __( 'message', 'text-domain' ) );
         }
     }
-    
-  
+
+    public function get_items( $request ) {
+        //get parameters from request
+        $params = $request->get_params();
+        $item = array();//do a query, call another class, etc
+        $data = $this->prepare_item_for_response( $item, $request );
+
+        $data = (array)$data;
+        //return a response or error based on some conditional
+        if ( 1 == 1 ) {
+            return new WP_REST_Response(  $data , 200 );
+        } else {
+            return new WP_Error( 'code', __( 'message', 'text-domain' ) );
+        }
+    }
     /**
      * Check if a given request has access to get a specific item
      *
@@ -83,7 +103,6 @@ class Ali_Api_Endpoints extends WP_REST_Controller {
     public function get_item_permissions_check( $request ) {
         return $this->get_items_permissions_check( $request );
     }
-    
    
     /**
      * Prepare the item for create or update operation
@@ -103,7 +122,7 @@ class Ali_Api_Endpoints extends WP_REST_Controller {
      * @return mixed
      */
     public function prepare_item_for_response( $item, $request ) {
-        return array();
+        return $request;
     }
     
     /**
@@ -133,9 +152,3 @@ class Ali_Api_Endpoints extends WP_REST_Controller {
         );
     }
 }
-
-
-
-
-
-
