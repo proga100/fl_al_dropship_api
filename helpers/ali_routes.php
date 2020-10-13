@@ -28,34 +28,39 @@ if (!defined('WPINC')) {
     die;
 }
 
-class Ali_Api_Endpoints extends WP_REST_Controller {
+class Ali_Api_Endpoints extends WP_REST_Controller
+{
 
-    public function __construct(){
-       add_action( 'rest_api_init', array($this, 'register_routes' ));
+    public function __construct()
+    {
+        add_action('rest_api_init', array($this, 'register_routes'));
     }
+
     /**
      * Register the routes for the objects of the controller.
      */
-    public function register_routes() {
+    public function register_routes()
+    {
         $version = '1';
         $namespace = 'ali_api_endpoints/v' . $version;
+
         $bases = [
-            'get_item_by_id'=>'item_id=(?P<item_id>[a-zA-Z0-9-]+)',
-            'get_items'=>'items_cat=(?P<lat>[a-z0-9 .\-]+)/long=(?P<long>[a-z0-9 .\-]+)'
+            'get_item_by_id' => '/item_id=(?P<item_id>[a-zA-Z0-9-]+)',
+            'get_items' => ''
         ];
 
-        foreach ($bases as $base=>$urlquery){
-            register_rest_route( $namespace, '/' . $base . '/'.$urlquery, array(
+        foreach ($bases as $base => $urlquery) {
+            register_rest_route($namespace, '/' . $base . $urlquery, array(
                 array(
-                    'methods'             => 'GET',
-                    'callback'            => array( $this, $base ),
-                    'args'                => array(
+                    'methods' => 'GET',
+                    'callback' => array($this, $base),
+                    'args' => array(
                         'context' => array(
                             'default' => 'view',
                         ),
                     ),
                 )
-            ) );
+            ));
         }
     }
 
@@ -65,55 +70,47 @@ class Ali_Api_Endpoints extends WP_REST_Controller {
      * @param WP_REST_Request $request Full data about the request.
      * @return WP_Error|WP_REST_Response
      */
-    public function get_item_by_id( $request ) {
+    public function get_item_by_id($request)
+    {
         //get parameters from request
         $params = $request->get_params();
-        $item = array();//do a query, call another class, etc
-        $data = $this->prepare_item_for_response( $item, $request );
+
+        $item = 'get_item_by_id';//do a query, call another class, etc
+        $getitems_query_keys = [
+            'keyword',
+            'affiliate_cat_id',
+            'min_price',
+            'max_price',
+            'min_score',
+            'max_score',
+            'product_id',
+            'vir_currency'];
+        $params ['product_id'] = $params['item_id'];
+        $queries_reqs = $this->escape_keys($getitems_query_keys, $params);
+
+        $data = $this->prepare_item_for_response($item, $queries_reqs);
 
         $data = (array)$data;
         //return a response or error based on some conditional
-        if ( 1 == 1 ) {
-            return new WP_REST_Response(  $data , 200 );
+        if (1 == 1) {
+            return new WP_REST_Response($data, 200);
         } else {
-            return new WP_Error( 'code', __( 'message', 'text-domain' ) );
+            return new WP_Error('code', __('message', 'text-domain'));
         }
     }
 
-    public function get_items( $request ) {
-        //get parameters from request
-        $params = $request->get_params();
-        $item = array();//do a query, call another class, etc
-        $data = $this->prepare_item_for_response( $item, $request );
-
-        $data = (array)$data;
-        //return a response or error based on some conditional
-        if ( 1 == 1 ) {
-            return new WP_REST_Response(  $data , 200 );
-        } else {
-            return new WP_Error( 'code', __( 'message', 'text-domain' ) );
+    public function escape_keys($getitems_query_keys, $params)
+    {
+        foreach ($getitems_query_keys as $getitems_query_key) {
+            if (!empty($params[$getitems_query_key])) {
+                $queries_reqs[$getitems_query_key] = $params[$getitems_query_key];
+            } else {
+                $queries_reqs[$getitems_query_key] = '';
+            }
         }
+        return $queries_reqs;
     }
-    /**
-     * Check if a given request has access to get a specific item
-     *
-     * @param WP_REST_Request $request Full data about the request.
-     * @return WP_Error|bool
-     */
-    public function get_item_permissions_check( $request ) {
-        return $this->get_items_permissions_check( $request );
-    }
-   
-    /**
-     * Prepare the item for create or update operation
-     *
-     * @param WP_REST_Request $request Request object
-     * @return WP_Error|object $prepared_item
-     */
-    protected function prepare_item_for_database( $request ) {
-        return array();
-    }
-    
+
     /**
      * Prepare the item for the REST response
      *
@@ -121,34 +118,64 @@ class Ali_Api_Endpoints extends WP_REST_Controller {
      * @param WP_REST_Request $request Request object.
      * @return mixed
      */
-    public function prepare_item_for_response( $item, $request ) {
+    public function prepare_item_for_response($item, $request)
+    {
+        if ($item == 'get_items') {
+            $request = apply_filters('fl_api_import_aliexpress_product_search_results', $request);
+        } elseif ($item == 'get_item_by_id') {
+            $request = apply_filters('fl_api_import_aliexpress_product_search_results', $request);
+        }
         return $request;
     }
-    
-    /**
-     * Get the query params for collections
-     *
-     * @return array
-     */
-    public function get_collection_params() {
-        return array(
-            'page'     => array(
-                'description'       => 'Current page of the collection.',
-                'type'              => 'integer',
-                'default'           => 1,
-                'sanitize_callback' => 'absint',
-            ),
-            'per_page' => array(
-                'description'       => 'Maximum number of items to be returned in result set.',
-                'type'              => 'integer',
-                'default'           => 10,
-                'sanitize_callback' => 'absint',
-            ),
-            'search'   => array(
-                'description'       => 'Limit results to those matching a string.',
-                'type'              => 'string',
-                'sanitize_callback' => 'sanitize_text_field',
-            ),
-        );
+
+    public function get_items($request)
+    {
+        //get parameters from request
+        $params = $request->get_params();
+        $getitems_query_keys = [
+            'keyword',
+            'affiliate_cat_id',
+            'min_price',
+            'max_price',
+            'min_score',
+            'max_score',
+            'product_id',
+            'vir_currency'
+        ];
+        $queries_reqs = $this->escape_keys($getitems_query_keys, $params);
+
+        $item = 'get_items';//do a query, call another class, etc
+        $data = $this->prepare_item_for_response($item, $queries_reqs);
+
+        $data = (array)$data;
+        //return a response or error based on some conditional
+        if (1 == 1) {
+            return new WP_REST_Response($data, 200);
+        } else {
+            return new WP_Error('code', __('message', 'text-domain'));
+        }
     }
+
+    /**
+     * Check if a given request has access to get a specific item
+     *
+     * @param WP_REST_Request $request Full data about the request.
+     * @return WP_Error|bool
+     */
+    public function get_item_permissions_check($request)
+    {
+        return $this->get_items_permissions_check($request);
+    }
+
+    /**
+     * Prepare the item for create or update operation
+     *
+     * @param WP_REST_Request $request Request object
+     * @return WP_Error|object $prepared_item
+     */
+    protected function prepare_item_for_database($request)
+    {
+        return array();
+    }
+
 }

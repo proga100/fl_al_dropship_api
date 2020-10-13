@@ -81,7 +81,7 @@ class AliexIOTest
         if ($product_id != '') $aliexpress_json = $this->testGetProductDetail($product_id, $currency);
         $data = json_decode($aliexpress_json);
         
-        print_r($data);
+
         
         return $data;
     }
@@ -119,7 +119,7 @@ class AliexIOTest
     {
         
         $comparams = $this->comparams;
-        
+        $comparams['default_hidden'] = 0;
         $this->default_hidden = $comparams['default_hidden'];
         
         $this->ali_api = $comparams['ali_api'];

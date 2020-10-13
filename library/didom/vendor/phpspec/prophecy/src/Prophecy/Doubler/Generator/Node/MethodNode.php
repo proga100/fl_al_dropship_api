@@ -78,7 +78,7 @@ class MethodNode
 
     public function setStatic($static = true)
     {
-        $this->static = (bool) $static;
+        $this->static = (bool)$static;
     }
 
     public function returnsReference()
@@ -147,7 +147,7 @@ class MethodNode
      */
     public function setNullableReturnType($bool = true)
     {
-        $this->nullableReturnType = (bool) $bool;
+        $this->nullableReturnType = (bool)$bool;
     }
 
     /**
@@ -168,12 +168,11 @@ class MethodNode
 
     public function getCode()
     {
-        if ($this->returnsReference)
-        {
+        if ($this->returnsReference) {
             return "throw new \Prophecy\Exception\Doubler\ReturnByReferenceException('Returning by reference not supported', get_class(\$this), '{$this->name}');";
         }
 
-        return (string) $this->code;
+        return (string)$this->code;
     }
 
     public function useParentCode()
@@ -187,10 +186,10 @@ class MethodNode
 
     private function generateArgument(ArgumentNode $arg)
     {
-        $argument = '$'.$arg->getName();
+        $argument = '$' . $arg->getName();
 
         if ($arg->isVariadic()) {
-            $argument = '...'.$argument;
+            $argument = '...' . $argument;
         }
 
         return $argument;

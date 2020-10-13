@@ -26,12 +26,12 @@ interface PredictionInterface
     /**
      * Tests that double fulfilled prediction.
      *
-     * @param Call[]        $calls
+     * @param Call[] $calls
      * @param ObjectProphecy $object
      * @param MethodProphecy $method
      *
-     * @throws object
      * @return void
+     * @throws object
      */
     public function check(array $calls, ObjectProphecy $object, MethodProphecy $method);
 }

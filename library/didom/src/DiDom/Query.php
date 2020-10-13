@@ -14,7 +14,7 @@ class Query
      * @const string
      */
     const TYPE_XPATH = 'XPATH';
-    const TYPE_CSS   = 'CSS';
+    const TYPE_CSS = 'CSS';
 
     /**
      * @var array
@@ -33,11 +33,11 @@ class Query
      */
     public static function compile($expression, $type = self::TYPE_CSS)
     {
-        if ( ! is_string($expression)) {
+        if (!is_string($expression)) {
             throw new InvalidArgumentException(sprintf('%s expects parameter 1 to be string, %s given', __METHOD__, gettype($expression)));
         }
 
-        if ( ! is_string($type)) {
+        if (!is_string($type)) {
             throw new InvalidArgumentException(sprintf('%s expects parameter 2 to be string, %s given', __METHOD__, gettype($type)));
         }
 
@@ -55,7 +55,7 @@ class Query
             return $expression;
         }
 
-        if ( ! array_key_exists($expression, static::$compiled)) {
+        if (!array_key_exists($expression, static::$compiled)) {
             static::$compiled[$expression] = static::cssToXpath($expression);
         }
 
@@ -309,7 +309,7 @@ class Query
             $attributes[] = self::convertPseudo($segments['pseudo'], $tagName, $parameters);
         }
 
-        if (count($attributes) === 0 && ! isset($segments['tag'])) {
+        if (count($attributes) === 0 && !isset($segments['tag'])) {
             throw new InvalidArgumentException('The array of segments must contain the name of the tag or at least one attribute');
         }
 
@@ -330,12 +330,12 @@ class Query
      */
     protected static function convertAttribute($name, $value)
     {
-        $isSimpleSelector = ! in_array(substr($name, 0, 1), ['^', '!'], true);
-        $isSimpleSelector = $isSimpleSelector && ( ! in_array(substr($name, -1), ['^', '$', '*', '!', '~'], true));
+        $isSimpleSelector = !in_array(substr($name, 0, 1), ['^', '!'], true);
+        $isSimpleSelector = $isSimpleSelector && (!in_array(substr($name, -1), ['^', '$', '*', '!', '~'], true));
 
         if ($isSimpleSelector) {
             // if specified only the attribute name
-            $xpath = $value === null ? '@'.$name : sprintf('@%s="%s"', $name, $value);
+            $xpath = $value === null ? '@' . $name : sprintf('@%s="%s"', $name, $value);
 
             return $xpath;
         }
@@ -433,13 +433,13 @@ class Query
             return sprintf('text() = "%s"', $string);
         }
 
-        if ($caseSensitive && ! $fullMatch) {
+        if ($caseSensitive && !$fullMatch) {
             return sprintf('contains(text(), "%s")', $string);
         }
 
         $strToLowerFunction = function_exists('mb_strtolower') ? 'mb_strtolower' : 'strtolower';
 
-        if ( ! $caseSensitive && $fullMatch) {
+        if (!$caseSensitive && $fullMatch) {
             return sprintf("php:functionString(\"{$strToLowerFunction}\", .) = php:functionString(\"{$strToLowerFunction}\", \"%s\")", $string);
         }
 
@@ -470,10 +470,10 @@ class Query
         $attrs = '(?P<attrs>(?:\[.+?\])*)?';
         $name = '(?P<pseudo>[\w\-]+)';
         $expr = '(?:\((?P<expr>[^\)]+)\))';
-        $pseudo = '(?::'.$name.$expr.'?)?';
+        $pseudo = '(?::' . $name . $expr . '?)?';
         $rel = '\s*(?P<rel>>)?';
 
-        $regexp = '/'.$tag.$id.$classes.$attrs.$pseudo.$rel.'/is';
+        $regexp = '/' . $tag . $id . $classes . $attrs . $pseudo . $rel . '/is';
 
         if (preg_match($regexp, $selector, $segments)) {
             if ($segments[0] === '') {

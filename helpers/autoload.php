@@ -27,16 +27,18 @@
 if (!defined('WPINC')) {
     die;
 }
-$plugin_dir =  plugin_dir_path( __DIR__ );
+$plugin_dir = plugin_dir_path(__DIR__);
 
-require_once($plugin_dir ."library/aliexapi-master/tests/Aliex.php");
+require_once($plugin_dir . "library/aliexapi-master/tests/Aliex.php");
 
-require_once($plugin_dir ."library/didom/alie_calls/ali_request_site_parcer.php");
+require_once($plugin_dir . "library/didom/alie_calls/ali_request_site_parcer.php");
 require_once("class_fl_api_aliexpress.php");
 require_once("ajax_calls.php");
 require_once("ali_routes.php");
 
+new fl_api_aliexpress_dropship();
 new Ali_Api_Endpoints();
+
 
 
 

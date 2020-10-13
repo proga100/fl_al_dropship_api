@@ -44,7 +44,7 @@ abstract class Node
 
         $returnArray = true;
 
-        if ( ! is_array($nodes)) {
+        if (!is_array($nodes)) {
             $nodes = [$nodes];
 
             $returnArray = false;
@@ -83,7 +83,7 @@ abstract class Node
 
         $returnArray = true;
 
-        if ( ! is_array($nodes)) {
+        if (!is_array($nodes)) {
             $nodes = [$nodes];
 
             $returnArray = false;
@@ -98,7 +98,7 @@ abstract class Node
                 $node = $node->getNode();
             }
 
-            if ( ! $node instanceof DOMNode) {
+            if (!$node instanceof DOMNode) {
                 throw new InvalidArgumentException(sprintf('Argument 1 passed to %s must be an instance of %s or DOMNode, %s given', __METHOD__, __CLASS__, (is_object($node) ? get_class($node) : gettype($node))));
             }
 
@@ -139,7 +139,7 @@ abstract class Node
             $node = $node->getNode();
         }
 
-        if ( ! $node instanceof DOMNode) {
+        if (!$node instanceof DOMNode) {
             throw new InvalidArgumentException(sprintf('Argument 1 passed to %s must be an instance of %s or DOMNode, %s given', __METHOD__, __CLASS__, (is_object($node) ? get_class($node) : gettype($node))));
         }
 
@@ -148,7 +148,7 @@ abstract class Node
                 $referenceNode = $referenceNode->getNode();
             }
 
-            if ( ! $referenceNode instanceof DOMNode) {
+            if (!$referenceNode instanceof DOMNode) {
                 throw new InvalidArgumentException(sprintf('Argument 2 passed to %s must be an instance of %s or DOMNode, %s given', __METHOD__, __CLASS__, (is_object($referenceNode) ? get_class($referenceNode) : gettype($referenceNode))));
             }
         }
@@ -187,7 +187,7 @@ abstract class Node
             $referenceNode = $referenceNode->getNode();
         }
 
-        if ( ! $referenceNode instanceof DOMNode) {
+        if (!$referenceNode instanceof DOMNode) {
             throw new InvalidArgumentException(sprintf('Argument 2 passed to %s must be an instance of %s or DOMNode, %s given', __METHOD__, __CLASS__, (is_object($referenceNode) ? get_class($referenceNode) : gettype($referenceNode))));
         }
 
@@ -219,7 +219,7 @@ abstract class Node
             $node = $node->getNode();
         }
 
-        if ( ! $node instanceof DOMNode) {
+        if (!$node instanceof DOMNode) {
             throw new InvalidArgumentException(sprintf('Argument 1 passed to %s must be an instance of %s or DOMNode, %s given', __METHOD__, __CLASS__, (is_object($node) ? get_class($node) : gettype($node))));
         }
 
@@ -458,7 +458,7 @@ abstract class Node
      */
     public function setInnerHtml($html)
     {
-        if ( ! is_string($html)) {
+        if (!is_string($html)) {
             throw new InvalidArgumentException(sprintf('%s expects parameter 1 to be string, %s given', __METHOD__, (is_object($html) ? get_class($html) : gettype($html))));
         }
 
@@ -519,10 +519,10 @@ abstract class Node
     public function setValue($value)
     {
         if (is_numeric($value)) {
-            $value = (string) $value;
+            $value = (string)$value;
         }
 
-        if ( ! is_string($value) && $value !== null) {
+        if (!is_string($value) && $value !== null) {
             throw new InvalidArgumentException(sprintf('%s expects parameter 1 to be string, %s given', __METHOD__, (is_object($value) ? get_class($value) : gettype($value))));
         }
 
@@ -586,7 +586,7 @@ abstract class Node
             $node = $node->getNode();
         }
 
-        if ( ! $node instanceof DOMNode) {
+        if (!$node instanceof DOMNode) {
             throw new InvalidArgumentException(sprintf('Argument 1 passed to %s must be an instance of %s or DOMNode, %s given', __METHOD__, __CLASS__, (is_object($node) ? get_class($node) : gettype($node))));
         }
 
@@ -665,13 +665,13 @@ abstract class Node
             $nodeType = 'DOMElement';
         }
 
-        if ( ! is_string($nodeType)) {
+        if (!is_string($nodeType)) {
             throw new InvalidArgumentException(sprintf('%s expects parameter 2 to be string, %s given', __METHOD__, gettype($nodeType)));
         }
 
         $allowedTypes = ['DOMElement', 'DOMText', 'DOMComment', 'DOMCdataSection'];
 
-        if ( ! in_array($nodeType, $allowedTypes, true)) {
+        if (!in_array($nodeType, $allowedTypes, true)) {
             throw new RuntimeException(sprintf('Unknown node type "%s". Allowed types: %s', $nodeType, implode(', ', $allowedTypes)));
         }
 
@@ -726,13 +726,13 @@ abstract class Node
         }
 
         if ($nodeType !== null) {
-            if ( ! is_string($nodeType)) {
+            if (!is_string($nodeType)) {
                 throw new InvalidArgumentException(sprintf('%s expects parameter 2 to be string, %s given', __METHOD__, gettype($nodeType)));
             }
 
             $allowedTypes = ['DOMElement', 'DOMText', 'DOMComment', 'DOMCdataSection'];
 
-            if ( ! in_array($nodeType, $allowedTypes, true)) {
+            if (!in_array($nodeType, $allowedTypes, true)) {
                 throw new RuntimeException(sprintf('Unknown node type "%s". Allowed types: %s', $nodeType, implode(', ', $allowedTypes)));
             }
         }
@@ -805,13 +805,13 @@ abstract class Node
             $nodeType = 'DOMElement';
         }
 
-        if ( ! is_string($nodeType)) {
+        if (!is_string($nodeType)) {
             throw new InvalidArgumentException(sprintf('%s expects parameter 2 to be string, %s given', __METHOD__, gettype($nodeType)));
         }
 
         $allowedTypes = ['DOMElement', 'DOMText', 'DOMComment', 'DOMCdataSection'];
 
-        if ( ! in_array($nodeType, $allowedTypes, true)) {
+        if (!in_array($nodeType, $allowedTypes, true)) {
             throw new RuntimeException(sprintf('Unknown node type "%s". Allowed types: %s', $nodeType, implode(', ', $allowedTypes)));
         }
 
@@ -866,13 +866,13 @@ abstract class Node
         }
 
         if ($nodeType !== null) {
-            if ( ! is_string($nodeType)) {
+            if (!is_string($nodeType)) {
                 throw new InvalidArgumentException(sprintf('%s expects parameter 2 to be string, %s given', __METHOD__, gettype($nodeType)));
             }
 
             $allowedTypes = ['DOMElement', 'DOMText', 'DOMComment', 'DOMCdataSection'];
 
-            if ( ! in_array($nodeType, $allowedTypes, true)) {
+            if (!in_array($nodeType, $allowedTypes, true)) {
                 throw new RuntimeException(sprintf('Unknown node type "%s". Allowed types: %s', $nodeType, implode(', ', $allowedTypes)));
             }
         }
@@ -991,7 +991,7 @@ abstract class Node
             $childNode = $childNode->getNode();
         }
 
-        if ( ! $childNode instanceof DOMNode) {
+        if (!$childNode instanceof DOMNode) {
             throw new InvalidArgumentException(sprintf('Argument 1 passed to %s must be an instance of %s or DOMNode, %s given', __METHOD__, __CLASS__, (is_object($childNode) ? get_class($childNode) : gettype($childNode))));
         }
 
@@ -1064,7 +1064,7 @@ abstract class Node
             $newNode = $newNode->getNode();
         }
 
-        if ( ! $newNode instanceof DOMNode) {
+        if (!$newNode instanceof DOMNode) {
             throw new InvalidArgumentException(sprintf('Argument 1 passed to %s must be an instance of %s or DOMNode, %s given', __METHOD__, __CLASS__, (is_object($newNode) ? get_class($newNode) : gettype($newNode))));
         }
 
@@ -1072,7 +1072,7 @@ abstract class Node
             $newNode = $newNode->cloneNode(true);
         }
 
-        if ($newNode->ownerDocument === null || ! $this->getDocument()->is($newNode->ownerDocument)) {
+        if ($newNode->ownerDocument === null || !$this->getDocument()->is($newNode->ownerDocument)) {
             $newNode = $this->node->ownerDocument->importNode($newNode, true);
         }
 
@@ -1114,7 +1114,7 @@ abstract class Node
     {
         $allowedClasses = ['DOMElement', 'DOMText', 'DOMComment', 'DOMCdataSection', 'DOMDocumentFragment'];
 
-        if ( ! is_object($node) || ! in_array(get_class($node), $allowedClasses, true)) {
+        if (!is_object($node) || !in_array(get_class($node), $allowedClasses, true)) {
             throw new InvalidArgumentException(sprintf('Argument 1 passed to %s must be an instance of DOMElement, DOMText, DOMComment, DOMCdataSection or DOMDocumentFragment, %s given', __METHOD__, (is_object($node) ? get_class($node) : gettype($node))));
         }
 

@@ -56,7 +56,7 @@ class Document
             return;
         }
 
-        if ( ! is_string($encoding)) {
+        if (!is_string($encoding)) {
             throw new InvalidArgumentException(sprintf('%s expects parameter 3 to be string, %s given', __METHOD__, gettype($encoding)));
         }
 
@@ -185,7 +185,7 @@ class Document
     {
         $returnArray = true;
 
-        if ( ! is_array($nodes)) {
+        if (!is_array($nodes)) {
             $nodes = [$nodes];
 
             $returnArray = false;
@@ -198,7 +198,7 @@ class Document
                 $node = $node->getNode();
             }
 
-            if ( ! $node instanceof DOMNode) {
+            if (!$node instanceof DOMNode) {
                 throw new InvalidArgumentException(sprintf('Argument 1 passed to %s must be an instance of %s\Element or DOMNode, %s given', __METHOD__, __NAMESPACE__, (is_object($node) ? get_class($node) : gettype($node))));
             }
 
@@ -228,7 +228,7 @@ class Document
      */
     public function preserveWhiteSpace($value = true)
     {
-        if ( ! is_bool($value)) {
+        if (!is_bool($value)) {
             throw new InvalidArgumentException(sprintf('%s expects parameter 1 to be boolean, %s given', __METHOD__, gettype($value)));
         }
 
@@ -254,15 +254,15 @@ class Document
      */
     public function load($string, $isFile = false, $type = Document::TYPE_HTML, $options = null)
     {
-        if ( ! is_string($string)) {
+        if (!is_string($string)) {
             throw new InvalidArgumentException(sprintf('%s expects parameter 1 to be string, %s given', __METHOD__, (is_object($string) ? get_class($string) : gettype($string))));
         }
 
-        if ( ! is_string($type)) {
+        if (!is_string($type)) {
             throw new InvalidArgumentException(sprintf('%s expects parameter 3 to be string, %s given', __METHOD__, (is_object($type) ? get_class($type) : gettype($type))));
         }
 
-        if ( ! in_array(strtolower($type), [Document::TYPE_HTML, Document::TYPE_XML], true)) {
+        if (!in_array(strtolower($type), [Document::TYPE_HTML, Document::TYPE_XML], true)) {
             throw new RuntimeException(sprintf('Document type must be "xml" or "html", %s given', $type));
         }
 
@@ -271,7 +271,7 @@ class Document
             $options = LIBXML_HTML_NODEFDTD;
         }
 
-        if ( ! is_int($options)) {
+        if (!is_int($options)) {
             throw new InvalidArgumentException(sprintf('%s expects parameter 4 to be integer, %s given', __METHOD__, (is_object($options) ? get_class($options) : gettype($options))));
         }
 
@@ -376,7 +376,7 @@ class Document
      */
     protected function loadFile($filename)
     {
-        if ( ! is_string($filename)) {
+        if (!is_string($filename)) {
             throw new InvalidArgumentException(sprintf('%s expects parameter 1 to be string, %s given', __METHOD__, gettype($filename)));
         }
 
@@ -431,7 +431,7 @@ class Document
                 $contextNode = $contextNode->getNode();
             }
 
-            if ( ! $contextNode instanceof DOMElement) {
+            if (!$contextNode instanceof DOMElement) {
                 throw new InvalidArgumentException(sprintf('Argument 4 passed to %s must be an instance of %s\Element or DOMElement, %s given', __METHOD__, __NAMESPACE__, (is_object($contextNode) ? get_class($contextNode) : gettype($contextNode))));
             }
 
@@ -542,7 +542,7 @@ class Document
         $expression = Query::compile($expression, $type);
         $expression = sprintf('count(%s)', $expression);
 
-        return (int) $this->createXpath()->evaluate($expression);
+        return (int)$this->createXpath()->evaluate($expression);
     }
 
     /**
@@ -589,7 +589,7 @@ class Document
      */
     public function format($format = true)
     {
-        if ( ! is_bool($format)) {
+        if (!is_bool($format)) {
             throw new InvalidArgumentException(sprintf('%s expects parameter 1 to be boolean, %s given', __METHOD__, gettype($format)));
         }
 
@@ -622,7 +622,7 @@ class Document
         if ($document instanceof Document) {
             $element = $document->getElement();
         } else {
-            if ( ! $document instanceof DOMDocument) {
+            if (!$document instanceof DOMDocument) {
                 throw new InvalidArgumentException(sprintf('Argument 1 passed to %s must be an instance of %s or DOMDocument, %s given', __METHOD__, __CLASS__, (is_object($document) ? get_class($document) : gettype($document))));
             }
 
