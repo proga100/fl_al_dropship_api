@@ -76,20 +76,6 @@ class Ali_Request_Site_Parcer extends Document
     
 }
 
-//$site_html = new Ali_Request_Site_Parcer('https://aliexpress.ru/item/4001237404951.html', true);
-
-//$site_html->parcer_ali_product_site();
-
-//print_r($site_html->get_product_values());
-//print_r($site_html->get_images());
-//print_r($site_html->get_variations_attibutes());
-//print_r($site_html->get_specs());
-
-//echo $des_url = $site_html->get_description_url();
-
-//$desc_site_html = new Ali_Request_Site_Parcer($des_url, true);
-
-
 
 
 

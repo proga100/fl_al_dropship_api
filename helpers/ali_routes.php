@@ -181,4 +181,21 @@ class Ali_Api_Endpoints extends WP_REST_Controller
         return array();
     }
 
+    public function get_full_info($ProductUrl)
+	{
+		$site_html = new Ali_Request_Site_Parcer($ProductUrl, true);
+
+		$site_html->parcer_ali_product_site();
+// TODO add full info of the product and api route for fuul info
+
+		//print_r($site_html->get_product_values());
+		//print_r($site_html->get_images());
+		//print_r($site_html->get_variations_attibutes());
+		//print_r($site_html->get_specs());
+
+		//echo $des_url = $site_html->get_description_url();
+
+		//$desc_site_html = new Ali_Request_Site_Parcer($des_url, true);
+	}
+
 }
