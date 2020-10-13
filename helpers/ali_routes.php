@@ -84,7 +84,9 @@ class Ali_Api_Endpoints extends WP_REST_Controller
             'min_score',
             'max_score',
             'product_id',
-            'vir_currency'];
+             'currency',
+			'language'
+		];
         $params ['product_id'] = $params['item_id'];
         $queries_reqs = $this->escape_keys($getitems_query_keys, $params);
 
@@ -102,11 +104,7 @@ class Ali_Api_Endpoints extends WP_REST_Controller
     public function escape_keys($getitems_query_keys, $params)
     {
         foreach ($getitems_query_keys as $getitems_query_key) {
-            if (!empty($params[$getitems_query_key])) {
-                $queries_reqs[$getitems_query_key] = $params[$getitems_query_key];
-            } else {
-                $queries_reqs[$getitems_query_key] = '';
-            }
+        	$queries_reqs[$getitems_query_key] = (!empty($params[$getitems_query_key])) ? $params[$getitems_query_key] : '';
         }
         return $queries_reqs;
     }
@@ -140,7 +138,12 @@ class Ali_Api_Endpoints extends WP_REST_Controller
             'min_score',
             'max_score',
             'product_id',
-            'vir_currency'
+            'currency',
+			'language',
+      		'limit',
+        	'limitstart',
+			'directionTable',
+			'directionTable'
         ];
         $queries_reqs = $this->escape_keys($getitems_query_keys, $params);
 

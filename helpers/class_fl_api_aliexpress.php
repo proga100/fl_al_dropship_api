@@ -194,59 +194,6 @@ class fl_api_aliexpress_dropship
         register_setting('fl-api-amp-settings-group', 'currency');
     }
 
-    public function fl_api_import_aliexpress_product_search()
-    {
-        $res = $this->fl_api_import_aliexpress_product_search_input_values();
-        if ($_GET['task'] == 'search' || $_GET['task'] == '') {
-            $results = $this->fl_api_import_aliexpress_product_search_results($res);
-
-            //  echo "<pre>";        print_r ($results);exit;
-
-            $product_id = $res['product_id'];
-            if ($product_id == '') {
-                foreach ($results->result->products as $product) {
-
-                    $ids[] = $product->productId; // get aliexpress product ids from results
-
-                }
-            } elseif ($product_id != '') {
-                $ids[] = $results->result->productId;
-                $results->result->products[] = $results->result;
-            }
-
-            $data = get_results_ae($ids);
-
-            $total_results = $results->result->totalResults;
-        }
-
-        if ($_GET['task'] == 'import_add') {
-            $pks = $_POST['cid'];
-
-            $message = json_encode(array('message' => $pks, 'result' => 1));
-
-            echo $message;
-            exit;
-        }
-    }
-
-    // Admin Import list  Page Function
-
-    public function fl_api_import_aliexpress_product_search_input_values()
-    {
-
-        $var['keyword'] = $_GET['keyword'];
-        $var['min_price'] = $_GET['min_price'];
-        $var['max_price'] = $_GET['max_price'];
-        $var['min_score'] = $_GET['min_score'];
-        $var['woo_cat'] = $_GET['woo_cat'];
-        $var['affiliate_cat_id'] = $_GET['affiliate_cat_id'];
-        $var['product_id'] = $_REQUEST['product_id'];
-        $var['limit'] = $_REQUEST['limit'];
-        $var['limitstart'] = $_REQUEST['limitstart'];
-
-        return $var;
-    }
-
     public function fl_api_import_aliexpress_product_search_results($res)
     {
         if (!empty($res['directionTable'])) {
@@ -254,45 +201,34 @@ class fl_api_aliexpress_dropship
             if ($sort == 'asc') $sort = 'orignalPriceUp';
             if ($sort == 'desc') $sort = 'orignalPriceDown';
         } else {
-
             $sort = NUll;
         }
 
-
+		$language = (!empty($res['language'])) ? $res['language'] : 'EN';
         $keyword = $res['keyword'];
         $product_id = $res['product_id'];
 
-        if (!empty($res['limitstart'])) {
-            $pageNo = $res['limitstart'];
-        } else {
-
-            $pageNo = 1;
-        }
-        $currency = $res['vir_currency'];
+        $pageNo = (!empty($res['limitstart'])) ? $res['limitstart'] : 1;
+		$currency = (!empty($res['currency'])) ? $res['currency'] : 'USD';
 
         $endCreditScore = $res['max_score'];
         $startCreditScore = $res['min_score'];
         $originalPriceFrom = $res['min_price'];
         $originalPriceTo = $res['max_price'];
 
-        if (!empty($res['limit'])) {
-            $pageSize = $res['limit'];
-        } else {
-
-            $res['limit'] = $pageSize = 5;
-        }
-
+        $pageSize = (!empty($res['limit'])) ? $res['limit'] : 5;
         $category_id = $res['affiliate_cat_id'];
 
         $comparams['ali_api'] = get_option('aliexpress_key');
         $comparams['tracking_id'] = get_option('tracking_id');
 
         $Ali = new AliexIOTest;
+
         $Ali->comparams = $comparams;
-        if ($product_id == '') $aliexpress_json = $Ali->testAliexIO($keyword, $pageNo, $pageSize, $sort, $originalPriceFrom, $originalPriceTo, $startCreditScore, $endCreditScore, $currency, $category_id);
+        if ($product_id == '') $aliexpress_json = $Ali->testAliexIO($keyword, $pageNo, $pageSize, $sort, $originalPriceFrom, $originalPriceTo, $startCreditScore, $endCreditScore, $currency, $category_id, $language);
         if ($product_id != '') $aliexpress_json = $Ali->testGetProductDetail($product_id, $currency);
-        $data = json_decode($aliexpress_json);
-        return $data;
+
+        return json_decode($aliexpress_json);
     }
 
     public function escape($val)

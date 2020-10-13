@@ -26,70 +26,9 @@ class AliexIOTest
         $this->parameter['productId'] = $productId;
         return $this;
     }
-    
-    public function get_products($res)
-    {
-        if (!empty($res['directionTable'])) {
-            $sort = $res['directionTable'];
-            if ($sort == 'asc') $sort = 'orignalPriceUp';
-            if ($sort == 'desc') $sort = 'orignalPriceDown';
-        } else {
-            
-            $sort = NUll;
-        }
-        $res = ['product_id' => '4001237404951'];
-        
-        $keyword = $res['keyword'];
-        
-        if (empty($keyword)) {
-            $keyword = $_SESSION['keyword'];
-        }
-        
-        $product_id = $res['product_id'];
-        foreach ($res as $key => $rt) {
-            $_SESSION[$key] = $rt;
-        }
-        
-        if (!empty($res['limitstart'])) {
-            $pageNo = $res['limitstart'];
-        } else {
-            
-            $pageNo = 1;
-        }
-        $currency = $res['vir_currency'];
-        
-        $endCreditScore = $res['max_score'];
-        $startCreditScore = $res['min_score'];
-        $originalPriceFrom = $res['min_price'];
-        $originalPriceTo = $res['max_price'];
-        
-        if (!empty($res['limit'])) {
-            $pageSize = $res['limit'];
-           
-        } else {
-            
-            $res['limit'] = $pageSize = 5;
-        }
-        
-        $category_id = $res['affiliate_cat_id'];
-        if (empty($category_id)) $category_id = $_SESSION['affiliate_cat_id'];
-        
-        //  $comparams['ali_api'] = get_option('aliexpress_key');
-        // $comparams['tracking_id'] = get_option('tracking_id');
-        
-        if ($product_id == '') $aliexpress_json = $this->testAliexIO($keyword, $pageNo, $pageSize, $sort, $originalPriceFrom, $originalPriceTo, $startCreditScore, $endCreditScore, $currency, $category_id);
-        if ($product_id != '') $aliexpress_json = $this->testGetProductDetail($product_id, $currency);
-        $data = json_decode($aliexpress_json);
-        
 
-        
-        return $data;
-    }
-    
-    public function testAliexIO($keyword, $pageNo, $pageSize, $sort, $originalPriceFrom, $originalPriceTo, $startCreditScore, $endCreditScore, $currency, $category_id)
+    public function testAliexIO($keyword, $pageNo, $pageSize, $sort, $originalPriceFrom, $originalPriceTo, $startCreditScore, $endCreditScore, $currency, $category_id, $language)
     {
-        $language = get_option('language');
-        $currency = get_woocommerce_currency();
         
         $conf = new GenericConfiguration();
         $this->aliconfig($conf);
@@ -146,9 +85,7 @@ class AliexIOTest
     {
         $currency = 'US';
         $language = 'EN';
-        
-        // $currency = get_option('currency');
-        
+        //echo $product_id;
         $conf = new GenericConfiguration();
         $this->aliconfig($conf);
         //  print_r ($conf);
