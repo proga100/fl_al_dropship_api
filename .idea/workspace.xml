@@ -20,8 +20,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9a6002de-e764-4c34-acb7-770b5efcc4f6" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/helpers/ali_routes.php" beforeDir="false" afterPath="$PROJECT_DIR$/helpers/ali_routes.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library/didom/alie_calls/ali_request_site_parcer.php" beforeDir="false" afterPath="$PROJECT_DIR$/library/didom/alie_calls/ali_request_site_parcer.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,6 +53,7 @@
       <updated>1598808520128</updated>
       <workItem from="1598808523135" duration="7684000" />
       <workItem from="1602610422516" duration="6645000" />
+      <workItem from="1603563703746" duration="12999000" />
     </task>
     <servers />
   </component>
@@ -69,5 +70,12 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="580" y="185" key="FileChooserDialogImpl" timestamp="1603564130875">
+      <screen x="0" y="0" width="1600" height="860" />
+    </state>
+    <state x="580" y="185" key="FileChooserDialogImpl/0.0.1600.860@0.0.1600.860" timestamp="1603564130875" />
   </component>
 </project>

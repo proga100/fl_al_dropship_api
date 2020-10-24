@@ -16,7 +16,7 @@
  * Description:       Creates api for aliexpress.com
  *
  * The component uses  the Aliexpress official providers APIs.
- * Version:           1.0.0
+ * Version:           2.0.0
  * Author:            Rusty
  * Author URI:        http://www.flance.info
  * Text Domain:       flance_aliexpress_dropship_api
@@ -31,171 +31,204 @@ if (!defined('WPINC')) {
 class Ali_Api_Endpoints extends WP_REST_Controller
 {
 
-    public function __construct()
-    {
-        add_action('rest_api_init', array($this, 'register_routes'));
-    }
+	public function __construct()
+	{
+		add_action('rest_api_init', array($this, 'register_routes'));
+	}
 
-    /**
-     * Register the routes for the objects of the controller.
-     */
-    public function register_routes()
-    {
-        $version = '1';
-        $namespace = 'ali_api_endpoints/v' . $version;
+	/**
+	 * Register the routes for the objects of the controller.
+	 */
+	public function register_routes()
+	{
+		$version = '1';
+		$namespace = 'ali_api_endpoints/v' . $version;
 
-        $bases = [
-            'get_item_by_id' => '/item_id=(?P<item_id>[a-zA-Z0-9-]+)',
-            'get_items' => ''
-        ];
+		$bases = [
+			'get_item_by_id' => '/product_id=(?P<product_id>[a-zA-Z0-9-]+)',
+			'get_items' => '',
+			'get_full_info_by_url' => '',
+			'get_desc_info_by_url' => ''
+		];
+		foreach ($bases as $base => $urlquery) {
+			register_rest_route($namespace, '/' . $base . $urlquery, array(
+				array(
+					'methods' => 'GET',
+					'callback' => array($this, 'get_base_functions'),
+					'args' => array(
+						'context' => array(
+							'default' => 'view',
+						),
+						'base' => array(
+							'default' => $base,
+						)
+					),
+				)
+			));
+		}
+	}
 
-        foreach ($bases as $base => $urlquery) {
-            register_rest_route($namespace, '/' . $base . $urlquery, array(
-                array(
-                    'methods' => 'GET',
-                    'callback' => array($this, $base),
-                    'args' => array(
-                        'context' => array(
-                            'default' => 'view',
-                        ),
-                    ),
-                )
-            ));
-        }
-    }
+	/**
+	 * Get one item from the collection
+	 *
+	 * @param WP_REST_Request $request Full data about the request.
+	 * @return WP_Error|WP_REST_Response
+	 */
 
-    /**
-     * Get one item from the collection
-     *
-     * @param WP_REST_Request $request Full data about the request.
-     * @return WP_Error|WP_REST_Response
-     */
-    public function get_item_by_id($request)
-    {
-        //get parameters from request
-        $params = $request->get_params();
+	public function get_base_functions($request)
+	{
 
-        $item = 'get_item_by_id';//do a query, call another class, etc
-        $getitems_query_keys = [
-            'keyword',
-            'affiliate_cat_id',
-            'min_price',
-            'max_price',
-            'min_score',
-            'max_score',
-            'product_id',
-             'currency',
+		$params = $request->get_params();
+		$base = $params['base'];
+		$get_item_by_id = [
+			'keyword',
+			'affiliate_cat_id',
+			'min_price',
+			'max_price',
+			'min_score',
+			'max_score',
+			'product_id',
+			'currency',
 			'language'
 		];
-        $params ['product_id'] = $params['item_id'];
-        $queries_reqs = $this->escape_keys($getitems_query_keys, $params);
 
-        $data = $this->prepare_item_for_response($item, $queries_reqs);
-
-        $data = (array)$data;
-        //return a response or error based on some conditional
-        if (1 == 1) {
-            return new WP_REST_Response($data, 200);
-        } else {
-            return new WP_Error('code', __('message', 'text-domain'));
-        }
-    }
-
-    public function escape_keys($getitems_query_keys, $params)
-    {
-        foreach ($getitems_query_keys as $getitems_query_key) {
-        	$queries_reqs[$getitems_query_key] = (!empty($params[$getitems_query_key])) ? $params[$getitems_query_key] : '';
-        }
-        return $queries_reqs;
-    }
-
-    /**
-     * Prepare the item for the REST response
-     *
-     * @param mixed $item WordPress representation of the item.
-     * @param WP_REST_Request $request Request object.
-     * @return mixed
-     */
-    public function prepare_item_for_response($item, $request)
-    {
-        if ($item == 'get_items') {
-            $request = apply_filters('fl_api_import_aliexpress_product_search_results', $request);
-        } elseif ($item == 'get_item_by_id') {
-            $request = apply_filters('fl_api_import_aliexpress_product_search_results', $request);
-        }
-        return $request;
-    }
-
-    public function get_items($request)
-    {
-        //get parameters from request
-        $params = $request->get_params();
-        $getitems_query_keys = [
-            'keyword',
-            'affiliate_cat_id',
-            'min_price',
-            'max_price',
-            'min_score',
-            'max_score',
-            'product_id',
-            'currency',
+		$get_items = [
+			'keyword',
+			'affiliate_cat_id',
+			'min_price',
+			'max_price',
+			'min_score',
+			'max_score',
+			'product_id',
+			'currency',
 			'language',
-      		'limit',
-        	'limitstart',
+			'limit',
+			'limitstart',
 			'directionTable',
 			'directionTable'
-        ];
-        $queries_reqs = $this->escape_keys($getitems_query_keys, $params);
+		];
+		$get_full_info_by_url = $getitems_query_keys = [
+			'productUrl'
+		];
+		$get_desc_info_by_url = [
+			'ProductDescUrl'
+		];;
+		$baseVals = [
+			'get_item_by_id' => $get_item_by_id,
+			'get_items' => $get_items,
+			'get_desc_info_by_url' => $get_desc_info_by_url,
+			'get_full_info_by_url' => $get_full_info_by_url,
+		];
+		$getitems_query_keys = $baseVals[$base];
 
-        $item = 'get_items';//do a query, call another class, etc
-        $data = $this->prepare_item_for_response($item, $queries_reqs);
+		$queries_reqs = $this->escape_keys($getitems_query_keys, $params);
 
-        $data = (array)$data;
-        //return a response or error based on some conditional
-        if (1 == 1) {
-            return new WP_REST_Response($data, 200);
-        } else {
-            return new WP_Error('code', __('message', 'text-domain'));
-        }
-    }
+		$data = $this->prepare_item_for_response($base, $queries_reqs);
 
-    /**
-     * Check if a given request has access to get a specific item
-     *
-     * @param WP_REST_Request $request Full data about the request.
-     * @return WP_Error|bool
-     */
-    public function get_item_permissions_check($request)
-    {
-        return $this->get_items_permissions_check($request);
-    }
+		$data = (array)$data;
+		//return a response or error based on some conditional
 
-    /**
-     * Prepare the item for create or update operation
-     *
-     * @param WP_REST_Request $request Request object
-     * @return WP_Error|object $prepared_item
-     */
-    protected function prepare_item_for_database($request)
-    {
-        return array();
-    }
+		if (!empty($data['errorCode'])) {
+			if ($data['errorCode'] == '20010000') {
 
-    public function get_full_info($ProductUrl)
+				return new WP_REST_Response($data, 200);
+			} else {
+				return new WP_Error('code', __('message: ', 'text-domain') . $data['errorCode']);
+			}
+		} else {
+			return new WP_Error('code', __('message: ', 'text-domain'));
+		}
+
+	}
+
+	public function escape_keys($getitems_query_keys, $params)
 	{
+		foreach ($getitems_query_keys as $getitems_query_key) {
+			$queries_reqs[$getitems_query_key] = (!empty($params[$getitems_query_key])) ? $params[$getitems_query_key] : '';
+		}
+		return $queries_reqs;
+	}
+
+	/**
+	 * Prepare the item for the REST response
+	 *
+	 * @param mixed $item WordPress representation of the item.
+	 * @param WP_REST_Request $request Request object.
+	 * @return mixed
+	 */
+	public function prepare_item_for_response($item, $request)
+	{
+		switch ($item):
+			case 'get_items':
+				$request = apply_filters('fl_api_import_aliexpress_product_search_results', $request);
+				break;
+			case 'get_item_by_id':
+				$request = apply_filters('fl_api_import_aliexpress_product_search_results', $request);
+				$request->result->productUrl = urlencode($request->result->productUrl);
+				break;
+			case 'get_full_info_by_url':
+				$request = $this->get_full_info($request['productUrl']);
+				break;
+			case 'get_desc_info_by_url':
+				$request = $this->get_desc_info($request['ProductDescUrl']);
+				break;
+		endswitch;
+		return $request;
+	}
+
+	/**
+	 * Check if a given request has access to get a specific item
+	 *
+	 * @param WP_REST_Request $request Full data about the request.
+	 * @return WP_Error|bool
+	 */
+	public function get_item_permissions_check($request)
+	{
+		return $this->get_items_permissions_check($request);
+	}
+
+	/**
+	 * Prepare the item for create or update operation
+	 *
+	 * @param WP_REST_Request $request Request object
+	 * @return WP_Error|object $prepared_item
+	 */
+	protected function prepare_item_for_database($request)
+	{
+		return array();
+	}
+
+	public function get_full_info($ProductUrl)
+	{
+
+
 		$site_html = new Ali_Request_Site_Parcer($ProductUrl, true);
 
 		$site_html->parcer_ali_product_site();
-// TODO add full info of the product and api route for fuul info
 
-		//print_r($site_html->get_product_values());
-		//print_r($site_html->get_images());
-		//print_r($site_html->get_variations_attibutes());
-		//print_r($site_html->get_specs());
 
-		//echo $des_url = $site_html->get_description_url();
+		$data['get_product_values'] = $site_html->get_product_values();
+		$data['get_images'] = $site_html->get_images();
+		$data['get_variations_attibutes'] = $site_html->get_variations_attibutes();
+		$data['get_specs'] = $site_html->get_specs();
 
-		//$desc_site_html = new Ali_Request_Site_Parcer($des_url, true);
+		$data['des_url'] = urlencode(trim(stripslashes($site_html->get_description_url()), '"'));
+
+		$data['errorCode'] = '20010000';
+
+		return $data;
+	}
+
+	public function get_desc_info($ProductDescUrl)
+	{
+		$ProductDescUrl = urldecode($ProductDescUrl);
+
+		$data = wp_remote_get($ProductDescUrl);
+		$data = (array)$data;
+
+		$data['errorCode'] = ($data['response']['code'] == '200') ? '20010000' : null;
+
+		return $data;
 	}
 
 }
